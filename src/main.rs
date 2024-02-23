@@ -1,3 +1,5 @@
+use std::fmt::Debug;
+
 fn add(a: i32, b: i32) -> i32 {
     a + b
 }
@@ -180,16 +182,17 @@ fn main() {
         println!("{:?}", person);
     }
 
-    // Advanced match
+    // Advanced match & Option
 
     enum Discount {
         Percent(i32),
         Flat(i32),
     }
 
+    #[derive(Debug)]
     struct Ticket {
         event: String,
-        price: i32,
+        price: Option<i32>,
     }
 
     let discount_ = Discount::Flat(12);
@@ -201,11 +204,36 @@ fn main() {
 
     let concert_ = Ticket {
         event: "Music Concert".to_owned(),
-        price: 50,
+        price: Some(50),
     };
 
     match concert_ {
-        Ticket { price: 50, event } => println!("{} at price 50.0", event),
-        Ticket { price, event } => println!("{} at price {}", event, price),
+        Ticket {
+            price: Some(50),
+            event,
+        } => println!("{} at price 50.0", event),
+        Ticket { price, event } => println!("{} at price {:?}", event, price),
+    }
+
+    let concerts_ = vec![
+        Ticket {
+            event: "Arijit".to_owned(),
+            price: Some(100),
+        },
+        Ticket {
+            event: "Tony Kakkar".to_owned(),
+            price: None,
+        },
+    ];
+
+    for ticket in concerts_ {
+        match ticket.price {
+            Some(price) => println!("{} price", price),
+            None => println!("Price is Free"),
+        }
+        if ticket.event == "Arijit" {
+            println!("{:?}", ticket);
+            break;
+        }
     }
 }
